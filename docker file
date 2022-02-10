@@ -1,14 +1,9 @@
-FROM komljen/jdk-oracle
-MAINTAINER Alen Komljen <alen.komljen@live.com>
+FROM tomcat:latest
 
-ENV JAVA_HEAP_SIZE 512
-ENV JAVA_HOME /usr/lib/jvm/java-7-oracle
+LABEL maintainer="Nidhi Gupta"
 
-RUN \
-  apt-get update && \
-  apt-get -y install \
-          tomcat7 && \
-  rm -rf /var/lib/apt/lists/*
+ADD ./target/LoginWebApp-1.war /usr/local/tomcat/webapps/
 
-RUN sed -i "s|#JAVA_HOME=.*|JAVA_HOME=$JAVA_HOME|g" /etc/default/tomcat7
-RUN sed -i "s|-Xmx128m|-Xmx${JAVA_HEAP_SIZE}m|g" /etc/default/tomcat7
+EXPOSE 8080
+
+CMD ["catalina.sh", "run"]
